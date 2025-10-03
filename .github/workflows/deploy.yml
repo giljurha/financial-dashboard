@@ -1,22 +1,17 @@
-name: Deploy to Production
+name: Deploy to Cafe24
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME_BACKEND: ${{ github.repository }}/backend
-  IMAGE_NAME_FRONTEND: ${{ github.repository }}/frontend
 
 jobs:
-  test:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
 
+    # Backend Build
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -26,12 +21,14 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
 
-    - name: Run backend tests
+    - name: Build WAR file
       run: |
         cd backend
         chmod +x gradlew
-        ./gradlew test
+        ./gradlew clean bootWar
+        cp build/libs/backend-0.0.1-SNAPSHOT.war build/libs/ROOT.war
 
+    # Frontend Build
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
@@ -39,107 +36,44 @@ jobs:
         cache: 'npm'
         cache-dependency-path: frontend/package-lock.json
 
-    - name: Install frontend dependencies
-      run: |
-        cd frontend
-        npm ci
-
-    - name: Run frontend tests
-      run: |
-        cd frontend
-        npm test -- --coverage --watchAll=false
-
     - name: Build frontend
       run: |
         cd frontend
+        npm ci
         npm run build
 
-  build-and-push:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Log in to Container Registry
-      uses: docker/login-action@v3
+    # Deploy Backend WAR to Tomcat
+    - name: Deploy WAR to Cafe24 Tomcat
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./backend/build/libs/
+        server-dir: /Tomcat/tomcat/webapps/
+        dangerous-clean-slate: false
 
-    - name: Extract metadata (tags, labels) for backend
-      id: meta-backend
-      uses: docker/metadata-action@v5
+    # Deploy Frontend to www
+    - name: Deploy Frontend to Cafe24
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}
-        tags: |
-          type=ref,event=branch
-          type=sha,prefix=sha-
-          type=raw,value=latest,enable={{is_default_branch}}
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./frontend/build/
+        server-dir: /www/
+        dangerous-clean-slate: false
 
-    - name: Extract metadata (tags, labels) for frontend
-      id: meta-frontend
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}
-        tags: |
-          type=ref,event=branch
-          type=sha,prefix=sha-
-          type=raw,value=latest,enable={{is_default_branch}}
-
-    - name: Build and push backend Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./backend
-        push: true
-        tags: ${{ steps.meta-backend.outputs.tags }}
-        labels: ${{ steps.meta-backend.outputs.labels }}
-
-    - name: Build and push frontend Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./frontend
-        push: true
-        tags: ${{ steps.meta-frontend.outputs.tags }}
-        labels: ${{ steps.meta-frontend.outputs.labels }}
-
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Deploy to production server
+    # Restart Tomcat
+    - name: Restart Tomcat via SSH
       uses: appleboy/ssh-action@v1.0.0
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: ${{ secrets.PORT }}
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
         script: |
-          cd /home/${{ secrets.USERNAME }}/financial-dashboard
-
-          # Pull latest code
-          git pull origin main
-
-          # Login to GitHub Container Registry
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-          # Pull latest images
-          docker-compose -f docker-compose.prod.yml pull
-
-          # Stop and remove old containers
-          docker-compose -f docker-compose.prod.yml down
-
-          # Start new containers
-          docker-compose -f docker-compose.prod.yml up -d
-
-          # Clean up old images
-          docker image prune -f
+          cd ~/Tomcat/tomcat/bin
+          ./shutdown.sh || true
+          sleep 5
+          ./startup.sh
