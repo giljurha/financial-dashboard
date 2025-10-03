@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: financial-dashboard
+
+financial-api:
+  base-url: https://financialmodelingprep.com/api/v3
+  api-key: VAaDqPELXV0qqRYq0DFXhD1RSYFnjjXU
+  stable-base-url: https://financialmodelingprep.com/stable
+
+cors:
+  allowed-origins: http://localhost:3000
