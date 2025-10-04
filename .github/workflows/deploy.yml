@@ -7,19 +7,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
     - name: Deploy to production server
-      uses: appleboy/ssh-action@v1.0.0
+      uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: 22
+        command_timeout: 30m
         script: |
-          cd /root/financial-dashboard
-          git pull origin main
-          docker-compose down
+          set -e
+          cd /root/financial-dashboard || exit 1
+          git pull origin main || exit 1
+          docker-compose down || true
           docker-compose up -d --build
           docker image prune -f
