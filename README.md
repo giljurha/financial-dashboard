@@ -28,5 +28,12 @@ Automatically deploys to cafe24 server on push to main branch.
 ## Local Development
 
 ```bash
+# Start all services
 docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
 ```
