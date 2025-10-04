@@ -20,7 +20,7 @@ Financial data visualization dashboard with Spring Boot backend and React fronte
 
 ## Deployment
 
-Automatically deploys to cafe24 server on push to main branch.
+Automatically deploys to cafe24 server on push to main branch using GitHub Actions.
 
 ### Access
 - Application: http://giljurha01.cafe24.com
