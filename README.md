@@ -23,8 +23,7 @@ Financial data visualization dashboard with Spring Boot backend and React fronte
 Automatically deploys to cafe24 server on push to main branch.
 
 ### Access
-- Frontend: http://1.234.75.247:3000
-- Backend: http://1.234.75.247:8080
+- Application: http://giljurha01.cafe24.com
 
 ## Local Development
 
