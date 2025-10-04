@@ -16,8 +16,9 @@ class CorsConfig : WebMvcConfigurer {
     private lateinit var allowedOrigins: String
 
     override fun addCorsMappings(registry: CorsRegistry) {
+        val origins = allowedOrigins.split(",").map { it.trim() }.toTypedArray()
         registry.addMapping("/**")
-            .allowedOrigins(allowedOrigins)
+            .allowedOrigins(*origins)
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*")
             .allowCredentials(true)
@@ -26,7 +27,8 @@ class CorsConfig : WebMvcConfigurer {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf(allowedOrigins)
+        val origins = allowedOrigins.split(",").map { it.trim() }
+        configuration.allowedOrigins = origins
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true

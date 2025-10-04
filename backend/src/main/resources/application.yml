@@ -11,4 +11,4 @@ financial-api:
   stable-base-url: https://financialmodelingprep.com/stable
 
 cors:
-  allowed-origins: http://localhost:3000
+  allowed-origins: http://localhost:3000,http://giljurha01.cafe24.com:3000
