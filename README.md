@@ -44,3 +44,4 @@ docker-compose down
 - Interactive charts powered by Chart.js
 - RESTful API with Spring Boot
 - Responsive React frontend
+- Automated deployment with GitHub Actions
