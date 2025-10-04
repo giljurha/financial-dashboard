@@ -37,3 +37,10 @@ docker-compose logs -f
 # Stop all services
 docker-compose down
 ```
+
+## Features
+
+- Real-time financial data visualization
+- Interactive charts powered by Chart.js
+- RESTful API with Spring Boot
+- Responsive React frontend
