@@ -1,0 +1,6 @@
+#!/usr/bin/expect -f
+set timeout 30
+spawn ssh root@1.234.75.247 "mkdir -p ~/.ssh && echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCMbJKF3h7+Meuf+rKfgAtC1YJE8r4zg9DzDqeTOFLrtFZQ3M0OLbRml8soOsLMAPdOwowYYM/cd8E5bSQQpM/hKJZKMX4+6D72jJ/678J9ukEgRP5WJC75filfbJDcePkpswLC6pRFu3tbWc7jMmvhdMkw42V3yckbIkIv3NS6lxVe1wvSpvaUxoJIlNKoN+iD5TIycYeMa3PsZ053yzVdUTbK06IGJOxqK2SsL9jB8rvfIZewaGT+SV3GI2shyGiO0wDnwBh1aDdBBkHKwCGaC8MuJ3oEMCeZteMxTur9AIIAy3tckgtIhUSBXk+xpZd6sOCM8KUQEv6GaWzrACii4gvCNCYgI66HjVbSA58r0uvP2i56CP0m3WhVGhdHFLtdVX8I8q4ZklXxU4KzQHEIXgR5se434K9NjAMJHi1suGK66Fd4aYmVp5IyLpP5uQ8BMIp2XwfGxrC0IElvgxBoUetEFO+kDEP9C0IWl9+XLe69ksCqWdRvdJu2JVXdZ/wY15+hgE3GwNAWQJXnKRSadZqkfBMiNnBZnZEDQqxMUgjtuHN3ZLYTdWztI8EJfiqo/wlFSjgzAOoqIwoY/rQraxUUMjeBPjMyr3YfqXaNhBCL9TSfLbFTdmNJ7MQN8joS2ukwrttdaTtEfi2m9OLIEM5HqGaKKzd4EO0eWGKIMw==' >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+expect "password:"
+send "eastside23!\r"
+expect eof
