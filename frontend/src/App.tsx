@@ -45,8 +45,8 @@ function App() {
   return (
     <div className="App">
       <header className="header">
-        <h1>재무 대시보드</h1>
-        <p>기업의 손익계산서 데이터를 인터랙티브 차트로 분석하세요</p>
+        <h1>원하는 주식을 검색해보세요</h1>
+        <p>기업의 손익계산서 데이터를 차트로 보여드립니다</p>
       </header>
 
       <div className="container">
@@ -87,20 +87,22 @@ function App() {
 
           {apiSource === 'financial-modeling-prep' && data && data.length > 0 && (
             <div>
-              <h2>{searchSymbol} 손익계산서 (Financial Modeling Prep)</h2>
-              <div className="chart-controls">
-                <label htmlFor="chart-type-select">차트 유형: </label>
-                <select
-                  id="chart-type-select"
-                  value={chartType}
-                  onChange={(e) => setChartType(e.target.value)}
-                  className="chart-type-select"
-                >
-                  <option value="all-metrics">전체 지표</option>
-                  <option value="revenue-trend">매출 추이</option>
-                  <option value="profit-comparison">수익성 비교</option>
-                  <option value="profit-margin">수익 구성</option>
-                </select>
+              <div className="chart-header">
+                <h2>{searchSymbol} 손익계산서 (Financial Modeling Prep)</h2>
+                <div className="chart-controls">
+                  <label htmlFor="chart-type-select">차트 유형: </label>
+                  <select
+                    id="chart-type-select"
+                    value={chartType}
+                    onChange={(e) => setChartType(e.target.value)}
+                    className="chart-type-select"
+                  >
+                    <option value="all-metrics">전체 지표</option>
+                    <option value="revenue-trend">매출 추이</option>
+                    <option value="profit-comparison">수익성 비교</option>
+                    <option value="profit-margin">수익 구성</option>
+                  </select>
+                </div>
               </div>
               <IncomeStatementChart data={data} chartType={chartType} />
             </div>
@@ -108,20 +110,22 @@ function App() {
 
           {apiSource === 'alphavantage' && alphaData && alphaData.annualReports && alphaData.annualReports.length > 0 && (
             <div>
-              <h2>{searchSymbol} 손익계산서 (AlphaVantage)</h2>
-              <div className="chart-controls">
-                <label htmlFor="chart-type-select">차트 유형: </label>
-                <select
-                  id="chart-type-select"
-                  value={chartType}
-                  onChange={(e) => setChartType(e.target.value)}
-                  className="chart-type-select"
-                >
-                  <option value="all-metrics">전체 지표</option>
-                  <option value="revenue-trend">매출 추이</option>
-                  <option value="profit-comparison">수익성 비교</option>
-                  <option value="profit-margin">수익 구성</option>
-                </select>
+              <div className="chart-header">
+                <h2>{searchSymbol} 손익계산서 (AlphaVantage)</h2>
+                <div className="chart-controls">
+                  <label htmlFor="chart-type-select">차트 유형: </label>
+                  <select
+                    id="chart-type-select"
+                    value={chartType}
+                    onChange={(e) => setChartType(e.target.value)}
+                    className="chart-type-select"
+                  >
+                    <option value="all-metrics">전체 지표</option>
+                    <option value="revenue-trend">매출 추이</option>
+                    <option value="profit-comparison">수익성 비교</option>
+                    <option value="profit-margin">수익 구성</option>
+                  </select>
+                </div>
               </div>
               <AlphaVantageIncomeChart data={alphaData.annualReports} chartType={chartType} />
             </div>
