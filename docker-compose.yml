@@ -23,7 +23,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - REACT_APP_API_URL=http://giljurha01.cafe24.com/api
+        - REACT_APP_API_URL=http://searchstock.kr/api
     container_name: financial-dashboard-frontend
     depends_on:
       backend:

@@ -15,4 +15,4 @@ alphavantage-api:
   api-key: ${ALPHAVANTAGE_API_KEY:RYNBSSUBKITPT99J}
 
 cors:
-  allowed-origins: http://localhost:3000,http://giljurha01.cafe24.com:3000,http://giljurha01.cafe24.com
+  allowed-origins: http://localhost:3000,http://searchstock.kr,https://searchstock.kr
