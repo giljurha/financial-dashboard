@@ -20,10 +20,28 @@ Financial data visualization dashboard with Spring Boot backend and React fronte
 
 ## Deployment
 
-Automatically deploys to cafe24 server on push to main branch using GitHub Actions.
+Automatically deploys to server on push to main branch using GitHub Actions.
 
 ### Access
-- Application: http://giljurha01.cafe24.com
+- Application: https://searchstock.kr
+
+### HTTPS Setup (First Time Only)
+
+To enable HTTPS with Let's Encrypt SSL certificate:
+
+1. SSH into your server
+2. Navigate to the project directory
+3. Update email in `init-letsencrypt.sh`:
+   ```bash
+   email="your-email@example.com"  # Change this
+   ```
+4. Run the initialization script:
+   ```bash
+   chmod +x init-letsencrypt.sh
+   sudo ./init-letsencrypt.sh
+   ```
+
+The certificate will auto-renew every 12 hours via the certbot container.
 
 ## Local Development
 
