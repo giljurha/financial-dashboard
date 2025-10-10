@@ -9,7 +9,7 @@ function App() {
   const [symbol, setSymbol] = useState<string>('AAPL');
   const [searchSymbol, setSearchSymbol] = useState<string>('AAPL');
   const [chartType, setChartType] = useState<string>('all-metrics');
-  const [apiSource, setApiSource] = useState<string>('financial-modeling-prep');
+  const [apiSource, setApiSource] = useState<string>('alphavantage');
 
   const { data, isLoading, error, refetch } = useQuery<IncomeStatementData[]>(
     ['incomeStatement', searchSymbol],
