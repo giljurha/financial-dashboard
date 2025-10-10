@@ -4,8 +4,10 @@ import { financialApi, alphaVantageApi } from './services/api';
 import IncomeStatementChart from './components/IncomeStatementChart';
 import AlphaVantageIncomeChart from './components/AlphaVantageIncomeChart';
 import { IncomeStatementData, AlphaVantageIncomeStatementResponse } from './types';
+import { useTheme } from './context/ThemeContext';
 
 function App() {
+  const { theme, toggleTheme } = useTheme();
   const [symbol, setSymbol] = useState<string>('AAPL');
   const [searchSymbol, setSearchSymbol] = useState<string>('AAPL');
   const [chartType, setChartType] = useState<string>('all-metrics');
@@ -45,8 +47,16 @@ function App() {
   return (
     <div className="App">
       <header className="header">
-        <h1>원하는 주식을 검색해보세요</h1>
-        <p>기업의 손익계산서 데이터를 차트로 보여드립니다</p>
+        <div className="header-content">
+          <div className="header-title">
+            <h1>원하는 주식을 검색해보세요</h1>
+            <p>기업의 손익계산서 데이터를 차트로 보여드립니다</p>
+          </div>
+        </div>
+        <button className="theme-toggle" onClick={toggleTheme}>
+          <span className="theme-icon">{theme === 'light' ? '🌙' : '☀️'}</span>
+          <span>{theme === 'light' ? '다크 모드' : '라이트 모드'}</span>
+        </button>
       </header>
 
       <div className="container">
@@ -77,9 +87,15 @@ function App() {
             </button>
           </div>
 
-          {(isLoading || alphaLoading) && <div className="loading">손익계산서 데이터를 불러오는 중...</div>}
+          {apiSource === 'financial-modeling-prep' && isLoading && <div className="loading">손익계산서 데이터를 불러오는 중...</div>}
+          {apiSource === 'alphavantage' && alphaLoading && <div className="loading">손익계산서 데이터를 불러오는 중...</div>}
 
-          {(error || alphaError) && (
+          {apiSource === 'financial-modeling-prep' && error && !isLoading && (
+            <div className="error">
+              손익계산서 데이터를 불러오는 중 오류가 발생했습니다. 주식 심볼을 확인하고 다시 시도해주세요.
+            </div>
+          )}
+          {apiSource === 'alphavantage' && alphaError && !alphaLoading && (
             <div className="error">
               손익계산서 데이터를 불러오는 중 오류가 발생했습니다. 주식 심볼을 확인하고 다시 시도해주세요.
             </div>
