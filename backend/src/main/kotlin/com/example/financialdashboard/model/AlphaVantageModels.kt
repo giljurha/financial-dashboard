@@ -5,11 +5,17 @@ import java.math.BigDecimal
 
 // Income Statement Response from AlphaVantage
 data class AlphaVantageIncomeStatementResponse(
-    val symbol: String,
+    val symbol: String?,
     @JsonProperty("annualReports")
-    val annualReports: List<AlphaVantageIncomeStatement>,
+    val annualReports: List<AlphaVantageIncomeStatement>?,
     @JsonProperty("quarterlyReports")
-    val quarterlyReports: List<AlphaVantageIncomeStatement>
+    val quarterlyReports: List<AlphaVantageIncomeStatement>?,
+    @JsonProperty("Error Message")
+    val errorMessage: String? = null,
+    @JsonProperty("Information")
+    val information: String? = null,
+    @JsonProperty("Note")
+    val note: String? = null
 )
 
 data class AlphaVantageIncomeStatement(
@@ -69,11 +75,17 @@ data class AlphaVantageIncomeStatement(
 
 // Balance Sheet Response from AlphaVantage
 data class AlphaVantageBalanceSheetResponse(
-    val symbol: String,
+    val symbol: String?,
     @JsonProperty("annualReports")
-    val annualReports: List<AlphaVantageBalanceSheet>,
+    val annualReports: List<AlphaVantageBalanceSheet>?,
     @JsonProperty("quarterlyReports")
-    val quarterlyReports: List<AlphaVantageBalanceSheet>
+    val quarterlyReports: List<AlphaVantageBalanceSheet>?,
+    @JsonProperty("Error Message")
+    val errorMessage: String? = null,
+    @JsonProperty("Information")
+    val information: String? = null,
+    @JsonProperty("Note")
+    val note: String? = null
 )
 
 data class AlphaVantageBalanceSheet(
@@ -157,11 +169,17 @@ data class AlphaVantageBalanceSheet(
 
 // Cash Flow Response from AlphaVantage
 data class AlphaVantageCashFlowResponse(
-    val symbol: String,
+    val symbol: String?,
     @JsonProperty("annualReports")
-    val annualReports: List<AlphaVantageCashFlow>,
+    val annualReports: List<AlphaVantageCashFlow>?,
     @JsonProperty("quarterlyReports")
-    val quarterlyReports: List<AlphaVantageCashFlow>
+    val quarterlyReports: List<AlphaVantageCashFlow>?,
+    @JsonProperty("Error Message")
+    val errorMessage: String? = null,
+    @JsonProperty("Information")
+    val information: String? = null,
+    @JsonProperty("Note")
+    val note: String? = null
 )
 
 data class AlphaVantageCashFlow(

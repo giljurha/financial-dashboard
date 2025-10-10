@@ -54,22 +54,33 @@ class AlphaVantageService {
             .flatMap { responseBody ->
                 logger.debug("Raw response for income statement: $responseBody")
 
-                // Check for AlphaVantage API error messages
-                if (responseBody.contains("Error Message", ignoreCase = true) ||
-                    responseBody.contains("Invalid API call", ignoreCase = true) ||
-                    responseBody.contains("premium endpoint", ignoreCase = true) ||
-                    responseBody.contains("rate limit", ignoreCase = true)) {
-                    logger.error("AlphaVantage API returned error for income statement: $responseBody")
-                    Mono.error(RuntimeException("AlphaVantage API error: $responseBody"))
-                } else {
-                    try {
-                        val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
-                        val response = objectMapper.readValue(responseBody, AlphaVantageIncomeStatementResponse::class.java)
-                        Mono.just(response)
-                    } catch (e: Exception) {
-                        logger.error("Failed to parse income statement response: ${e.message}. Response: $responseBody", e)
-                        Mono.error(RuntimeException("Failed to parse AlphaVantage response: ${e.message}"))
+                try {
+                    val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
+                    val response = objectMapper.readValue(responseBody, AlphaVantageIncomeStatementResponse::class.java)
+
+                    // Check for error fields in the response
+                    when {
+                        response.errorMessage != null -> {
+                            logger.error("AlphaVantage API error for income statement: ${response.errorMessage}")
+                            Mono.error(RuntimeException("AlphaVantage API error: ${response.errorMessage}"))
+                        }
+                        response.information != null -> {
+                            logger.error("AlphaVantage API information for income statement: ${response.information}")
+                            Mono.error(RuntimeException("AlphaVantage API: ${response.information}"))
+                        }
+                        response.note != null -> {
+                            logger.warn("AlphaVantage API note for income statement: ${response.note}")
+                            Mono.error(RuntimeException("AlphaVantage API: ${response.note}"))
+                        }
+                        response.symbol == null || response.annualReports == null -> {
+                            logger.error("AlphaVantage API returned incomplete data for income statement. Response: $responseBody")
+                            Mono.error(RuntimeException("AlphaVantage API returned incomplete data"))
+                        }
+                        else -> Mono.just(response)
                     }
+                } catch (e: Exception) {
+                    logger.error("Failed to parse income statement response: ${e.message}. Response: $responseBody", e)
+                    Mono.error(RuntimeException("Failed to parse AlphaVantage response: ${e.message}"))
                 }
             }
             .doOnError { error ->
@@ -109,22 +120,33 @@ class AlphaVantageService {
             .flatMap { responseBody ->
                 logger.debug("Raw response for balance sheet: $responseBody")
 
-                // Check for AlphaVantage API error messages
-                if (responseBody.contains("Error Message", ignoreCase = true) ||
-                    responseBody.contains("Invalid API call", ignoreCase = true) ||
-                    responseBody.contains("premium endpoint", ignoreCase = true) ||
-                    responseBody.contains("rate limit", ignoreCase = true)) {
-                    logger.error("AlphaVantage API returned error for balance sheet: $responseBody")
-                    Mono.error(RuntimeException("AlphaVantage API error: $responseBody"))
-                } else {
-                    try {
-                        val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
-                        val response = objectMapper.readValue(responseBody, AlphaVantageBalanceSheetResponse::class.java)
-                        Mono.just(response)
-                    } catch (e: Exception) {
-                        logger.error("Failed to parse balance sheet response: ${e.message}. Response: $responseBody", e)
-                        Mono.error(RuntimeException("Failed to parse AlphaVantage response: ${e.message}"))
+                try {
+                    val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
+                    val response = objectMapper.readValue(responseBody, AlphaVantageBalanceSheetResponse::class.java)
+
+                    // Check for error fields in the response
+                    when {
+                        response.errorMessage != null -> {
+                            logger.error("AlphaVantage API error for balance sheet: ${response.errorMessage}")
+                            Mono.error(RuntimeException("AlphaVantage API error: ${response.errorMessage}"))
+                        }
+                        response.information != null -> {
+                            logger.error("AlphaVantage API information for balance sheet: ${response.information}")
+                            Mono.error(RuntimeException("AlphaVantage API: ${response.information}"))
+                        }
+                        response.note != null -> {
+                            logger.warn("AlphaVantage API note for balance sheet: ${response.note}")
+                            Mono.error(RuntimeException("AlphaVantage API: ${response.note}"))
+                        }
+                        response.symbol == null || response.annualReports == null -> {
+                            logger.error("AlphaVantage API returned incomplete data for balance sheet. Response: $responseBody")
+                            Mono.error(RuntimeException("AlphaVantage API returned incomplete data"))
+                        }
+                        else -> Mono.just(response)
                     }
+                } catch (e: Exception) {
+                    logger.error("Failed to parse balance sheet response: ${e.message}. Response: $responseBody", e)
+                    Mono.error(RuntimeException("Failed to parse AlphaVantage response: ${e.message}"))
                 }
             }
             .doOnError { error ->
@@ -164,22 +186,33 @@ class AlphaVantageService {
             .flatMap { responseBody ->
                 logger.debug("Raw response for cash flow: $responseBody")
 
-                // Check for AlphaVantage API error messages
-                if (responseBody.contains("Error Message", ignoreCase = true) ||
-                    responseBody.contains("Invalid API call", ignoreCase = true) ||
-                    responseBody.contains("premium endpoint", ignoreCase = true) ||
-                    responseBody.contains("rate limit", ignoreCase = true)) {
-                    logger.error("AlphaVantage API returned error for cash flow: $responseBody")
-                    Mono.error(RuntimeException("AlphaVantage API error: $responseBody"))
-                } else {
-                    try {
-                        val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
-                        val response = objectMapper.readValue(responseBody, AlphaVantageCashFlowResponse::class.java)
-                        Mono.just(response)
-                    } catch (e: Exception) {
-                        logger.error("Failed to parse cash flow response: ${e.message}. Response: $responseBody", e)
-                        Mono.error(RuntimeException("Failed to parse AlphaVantage response: ${e.message}"))
+                try {
+                    val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
+                    val response = objectMapper.readValue(responseBody, AlphaVantageCashFlowResponse::class.java)
+
+                    // Check for error fields in the response
+                    when {
+                        response.errorMessage != null -> {
+                            logger.error("AlphaVantage API error for cash flow: ${response.errorMessage}")
+                            Mono.error(RuntimeException("AlphaVantage API error: ${response.errorMessage}"))
+                        }
+                        response.information != null -> {
+                            logger.error("AlphaVantage API information for cash flow: ${response.information}")
+                            Mono.error(RuntimeException("AlphaVantage API: ${response.information}"))
+                        }
+                        response.note != null -> {
+                            logger.warn("AlphaVantage API note for cash flow: ${response.note}")
+                            Mono.error(RuntimeException("AlphaVantage API: ${response.note}"))
+                        }
+                        response.symbol == null || response.annualReports == null -> {
+                            logger.error("AlphaVantage API returned incomplete data for cash flow. Response: $responseBody")
+                            Mono.error(RuntimeException("AlphaVantage API returned incomplete data"))
+                        }
+                        else -> Mono.just(response)
                     }
+                } catch (e: Exception) {
+                    logger.error("Failed to parse cash flow response: ${e.message}. Response: $responseBody", e)
+                    Mono.error(RuntimeException("Failed to parse AlphaVantage response: ${e.message}"))
                 }
             }
             .doOnError { error ->
