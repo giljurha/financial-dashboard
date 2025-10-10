@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { financialApi, alphaVantageApi } from './services/api';
 import IncomeStatementChart from './components/IncomeStatementChart';
 import AlphaVantageIncomeChart from './components/AlphaVantageIncomeChart';
+import CustomSelect from './components/CustomSelect';
 import { IncomeStatementData, AlphaVantageIncomeStatementResponse } from './types';
 import { useTheme } from './context/ThemeContext';
 
@@ -62,18 +63,16 @@ function App() {
       <div className="container">
         <>
           <div className="search-container">
-            <div className="api-source-selector">
-              <label htmlFor="api-source-select">데이터 소스: </label>
-              <select
-                id="api-source-select"
-                value={apiSource}
-                onChange={(e) => setApiSource(e.target.value)}
-                className="api-source-select"
-              >
-                <option value="financial-modeling-prep">Financial Modeling Prep</option>
-                <option value="alphavantage">AlphaVantage</option>
-              </select>
-            </div>
+            <CustomSelect
+              label="데이터 소스:"
+              options={[
+                { value: 'financial-modeling-prep', label: 'Financial Modeling Prep' },
+                { value: 'alphavantage', label: 'AlphaVantage' }
+              ]}
+              value={apiSource}
+              onChange={setApiSource}
+              className="api-source-selector"
+            />
             <input
               type="text"
               className="search-input"
@@ -105,20 +104,18 @@ function App() {
             <div>
               <div className="chart-header">
                 <h2>{searchSymbol} 손익계산서 (Financial Modeling Prep)</h2>
-                <div className="chart-controls">
-                  <label htmlFor="chart-type-select">차트 유형: </label>
-                  <select
-                    id="chart-type-select"
-                    value={chartType}
-                    onChange={(e) => setChartType(e.target.value)}
-                    className="chart-type-select"
-                  >
-                    <option value="all-metrics">전체 지표</option>
-                    <option value="revenue-trend">매출 추이</option>
-                    <option value="profit-comparison">수익성 비교</option>
-                    <option value="profit-margin">수익 구성</option>
-                  </select>
-                </div>
+                <CustomSelect
+                  label="차트 유형:"
+                  options={[
+                    { value: 'all-metrics', label: '전체 지표' },
+                    { value: 'revenue-trend', label: '매출 추이' },
+                    { value: 'profit-comparison', label: '수익성 비교' },
+                    { value: 'profit-margin', label: '수익 구성' }
+                  ]}
+                  value={chartType}
+                  onChange={setChartType}
+                  className="chart-controls"
+                />
               </div>
               <IncomeStatementChart data={data} chartType={chartType} />
             </div>
@@ -128,20 +125,18 @@ function App() {
             <div>
               <div className="chart-header">
                 <h2>{searchSymbol} 손익계산서 (AlphaVantage)</h2>
-                <div className="chart-controls">
-                  <label htmlFor="chart-type-select">차트 유형: </label>
-                  <select
-                    id="chart-type-select"
-                    value={chartType}
-                    onChange={(e) => setChartType(e.target.value)}
-                    className="chart-type-select"
-                  >
-                    <option value="all-metrics">전체 지표</option>
-                    <option value="revenue-trend">매출 추이</option>
-                    <option value="profit-comparison">수익성 비교</option>
-                    <option value="profit-margin">수익 구성</option>
-                  </select>
-                </div>
+                <CustomSelect
+                  label="차트 유형:"
+                  options={[
+                    { value: 'all-metrics', label: '전체 지표' },
+                    { value: 'revenue-trend', label: '매출 추이' },
+                    { value: 'profit-comparison', label: '수익성 비교' },
+                    { value: 'profit-margin', label: '수익 구성' }
+                  ]}
+                  value={chartType}
+                  onChange={setChartType}
+                  className="chart-controls"
+                />
               </div>
               <AlphaVantageIncomeChart data={alphaData.annualReports} chartType={chartType} />
             </div>
