@@ -1,0 +1,18 @@
+# config/crew_settings.yaml
+# ────────────────────────────────
+# ⚙️ Crew 전체 실행 설정
+# ────────────────────────────────
+
+openai:
+  model: gpt-4o-mini
+  temperature: 0.3
+  max_tokens: 4000
+  api_key_env: OPENAI_API_KEY
+
+embedding:
+  model: text-embedding-3-small
+  api_key_env: OPENAI_API_KEY
+
+crew:
+  max_concurrency: 3
+  verbose: true

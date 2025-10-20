@@ -1,0 +1,36 @@
+[project]
+name = "news-report-agent"
+version = "0.1.0"
+description = "AI-driven news aggregation, clustering, and event reporting agent"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "crewai[tools]>=0.152.0",
+    "openai>=1.52.0",
+    "pydantic>=2.8.0",
+    "python-dotenv>=1.0.1",
+    "psycopg2-binary>=2.9.9",
+    "pgvector>=0.2.5",
+    "requests>=2.32.3",
+    "beautifulsoup4>=4.12.3",
+    "tqdm>=4.66.5",
+    "rich>=13.8.1",
+
+    # 👇 새로 추가해야 하는 패키지들
+    "feedparser>=6.0.11",
+    "newspaper3k>=0.2.8",
+
+    # 기존 내용 유지하면서 아래 3개만 추가!
+    "lxml[html_clean]>=5.2.0",
+    "lxml_html_clean>=0.1.0",
+    "newspaper4k>=0.9.3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# 👇 여기 추가
+[tool.hatch.build.targets.wheel]
+packages = ["."]

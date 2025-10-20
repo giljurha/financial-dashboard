@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: financial-dashboard
+
+financial-api:
+  base-url: https://financialmodelingprep.com/api/v3
+  api-key: ${FINANCIAL_API_KEY:VAaDqPELXV0qqRYq0DFXhD1RSYFnjjXU}
+  stable-base-url: https://financialmodelingprep.com/stable
+
+alphavantage-api:
+  base-url: https://www.alphavantage.co/query
+  api-key: ${ALPHAVANTAGE_API_KEY:RYNBSSUBKITPT99J}
+
+cors:
+  allowed-origins: http://localhost:3000,http://searchstock.kr,https://searchstock.kr
